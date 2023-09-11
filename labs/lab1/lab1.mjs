@@ -3,7 +3,7 @@
  * Reflection question 1
  * Undefined har värdet false i JS.
  */
-
+import { v4 as uuidv4 } from 'uuid';
 import inventory from './inventory.mjs';
 console.log('\n=== beginning of printout ================================')
 console.log('inventory:', inventory);
@@ -40,28 +40,35 @@ console.log('\n--- Assignment 2 ---------------------------------------')
 
 class Salad {
   ingredients = {};
+  static instCounter = 0;
 
   constructor(salad) {
+    this.id = `salad_${Salad.instCounter++}`;
     if(salad instanceof Salad) {
+      const uuid = uuidv4();
       this.ingredients = {...salad.ingredients};
     }
+    
   }
 
   static parse(json) {
-    if(typeof json === 'string' ) {
-      let salad = new Salad();
-      salad.ingredients = {...JSON.parse(json).ingredients};
-      return salad;
-    } else if(Array.isArray(json)) {
-      let saladArray = new Array();
-      json.forEach((jsonSalad) => {
+    if(typeof json === "string") {
+      if (Array.isArray(JSON.parse(json))) {
+        let retArr = new Array();
+        JSON.parse(json).forEach((jsonSalad) => {
+          let salad = new Salad();
+          salad.ingredients = {...jsonSalad.ingredients};
+          salad.uuid = {...jsonSalad.uuid};
+          retArr.push(salad);
+        });
+        return retArr;
+      } else {
         let salad = new Salad();
-        salad.ingredients = {...JSON.parse(jsonSalad).ingredients};
-        saladArray.push(salad);
-      })
-      return saladArray;
+        salad.ingredients = {...JSON.parse(json).ingredients};
+        salad.uuid = {...JSON.parse(json)}.uuid;
+        return salad;
+      }
     }
-
   }
 
   add(name, properties) {
@@ -74,6 +81,27 @@ class Salad {
     return this;
   }
 }
+
+class GourmetSalad extends Salad {
+  ingredients = {};
+
+  constructor(salad) {
+    super(salad)
+  }
+
+  add(name, properties, size) {
+    let propWithSize = {...properties, "size": (this.ingredients[name]?.size || 0) + (size || 1)};
+    return super.add(name, propWithSize);
+}
+
+getPrice() {
+    return Object.values(this.ingredients).reduce(
+        (prev, curr) => prev + curr.price * curr.size, 0
+    );
+}
+}
+
+
 
 let myCaesarSalad = new Salad()
   .add('Sallad', inventory['Sallad'])
@@ -137,7 +165,7 @@ console.log('originalet kostar ' + myCaesarSalad.getPrice() + ' kr');
 console.log('kopian med gurka kostar ' + singleCopy.getPrice() + ' kr');
 
 console.log('\n--- Assignment 5 ---------------------------------------')
-/*
+
 let myGourmetSalad = new GourmetSalad()
   .add('Sallad', inventory['Sallad'], 0.5)
   .add('Kycklingfilé', inventory['Kycklingfilé'], 2)
@@ -148,12 +176,12 @@ let myGourmetSalad = new GourmetSalad()
 console.log('Min gourmetsallad med lite bacon kostar ' + myGourmetSalad.getPrice() + ' kr');
 myGourmetSalad.add('Bacon', inventory['Bacon'], 1)
 console.log('Med extra bacon kostar den ' + myGourmetSalad.getPrice() + ' kr');
-*/
+
 console.log('\n--- Assignment 6 ---------------------------------------')
-/*
+
 console.log('Min gourmetsallad har id: ' + myGourmetSalad.id);
 console.log('Min gourmetsallad har uuid: ' + myGourmetSalad.uuid);
-*/
+
 
 /**
  * Reflection question 4
