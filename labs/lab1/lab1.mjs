@@ -32,7 +32,7 @@ function makeOptions(inv, prop) {
     .filter((item) => inv[item][prop])
     .map((item) => `<option value="${item}" key="${item}"> ${item}, ${inv[item].price} kr</option>\n`)
     .reduce((prev, curr) => prev + curr, "");
-  return items
+  
 }
 console.log(makeOptions(inventory, 'foundation'));
 
@@ -43,16 +43,25 @@ class Salad {
 
   constructor(salad) {
     if(salad instanceof Salad) {
-      this.ingredients = salad.ingredients;
+      this.ingredients = {...salad.ingredients};
     }
   }
 
   static parse(json) {
-    if(typeof json === String) {
-      return new Salad()
+    if(typeof json === 'string' ) {
+      let salad = new Salad();
+      salad.ingredients = {...JSON.parse(json).ingredients};
+      return salad;
     } else if(Array.isArray(json)) {
-      return new Array() 
+      let saladArray = new Array();
+      json.forEach((jsonSalad) => {
+        let salad = new Salad();
+        salad.ingredients = {...JSON.parse(jsonSalad).ingredients};
+        saladArray.push(salad);
+      })
+      return saladArray;
     }
+
   }
 
   add(name, properties) {
@@ -112,6 +121,7 @@ console.log('\n--- Assignment 4 ---------------------------------------')
 
 const singleText = JSON.stringify(myCaesarSalad);
 const arrayText = JSON.stringify([myCaesarSalad, myCaesarSalad]);
+
 
 const objectCopy = new Salad(myCaesarSalad);
 const singleCopy = Salad.parse(singleText);
