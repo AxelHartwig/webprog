@@ -44,8 +44,8 @@ class Salad {
 
   constructor(salad) {
     this.id = `salad_${Salad.instCounter++}`;
+    this.uuid = uuidv4();
     if(salad instanceof Salad) {
-      const uuid = uuidv4();
       this.ingredients = {...salad.ingredients};
     }
     
