@@ -10,14 +10,15 @@ function ComposeSalad(props) {
   let proteins = Object.keys(props.inventory).filter(name => props.inventory[name].protein);
   //this.setShoppingCart = setShoppingCart;
 
-  const [foundation, setFoundation] = useState('Pasta');
-  const [protein, setProtein] = useState('Kycklingfilé');
-  const [dressing, setDressing] = useState('Ceasardressing');
-  const [extra, setExtra] = useState(new Set(["Bacon", "Fetaost"]));
+  const [foundation, setFoundation] = useState("");
+  const [protein, setProtein] = useState("");
+  const [dressing, setDressing] = useState("");
+  const [extra, setExtra] = useState(new Set());
 
   function MySaladSelect({ options, value, onChange }) {
     return (
       <div className='ps-5 pb-5 pt-3'>
+        <div className = 'invalid-feedback'></div>
         <select value={value} onChange={onChange} required className='col-4'>
           <option value=''>Gör ditt val</option>
           {options.map(name => <option key={name}> {name} </option>)}
@@ -71,9 +72,9 @@ function clearForm() {
 }*/
 
 function clearForm() {
-  setFoundation(foundations[0]);
-	setProtein(proteins[0]);
-	setDressing(dressings[0]);
+  setFoundation("");
+	setProtein("");
+	setDressing("");
 	setExtra(new Set());
 }
 
