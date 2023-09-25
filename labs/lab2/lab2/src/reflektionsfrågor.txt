@@ -1,0 +1,36 @@
+Reflection question 1: The render function must be a pure function of props and the
+component state, the values returned by useState(). What happens if the output of the
+render function is depending on other data that changes over time?
+
+A: You would get inconsistent outputs depending on earlier changes.
+
+
+Reflection question 2: In the code above, the foundations array is computed every time
+the component is rendered. The inventory changes very infrequent so you might think this
+is inefficient. Can you cache foundations so it is only computed when props.inventory
+changes?
+
+A: ?
+
+Reflection question 3: Should you move the foundation state to the MySaladSelect
+component above?
+
+A: No, it is ComponentSalad needs to use that information when handling submits.
+
+Reflection question 4: What triggers react to call the render function and update the DOM?
+
+A: When the state or props changes. 
+
+Reflection question 5: When the user change the html form state (DOM), does this change
+the state of your component?
+
+A: Yes because the onChange i n the html runs the setState function.
+
+Reflection question 6: What is the value of this in the event handling call-back functions?
+
+A: Its the event object
+
+Reflection question 7: How is the prototype chain affected when copying an object with
+copy = {...sourceObject}?
+
+A:

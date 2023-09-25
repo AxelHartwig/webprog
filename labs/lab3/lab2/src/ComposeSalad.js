@@ -1,9 +1,15 @@
 import { useState } from 'react';
 import Salad from './lab1.mjs';
 import inventory from './inventory.mjs';
-import App from './App.js'
+//import App from './App.js'
+import { useOutletContext, useNavigate } from 'react-router-dom';
 
-function ComposeSalad(props) {
+
+function ComposeSalad() {
+  const props = useOutletContext();
+  const nav = useNavigate();
+
+
   let foundations = Object.keys(props.inventory).filter(name => props.inventory[name].foundation);
   let extras = Object.keys(props.inventory).filter(name => props.inventory[name].extra);
   let dressings = Object.keys(props.inventory).filter(name => props.inventory[name].dressing);
@@ -18,11 +24,12 @@ function ComposeSalad(props) {
   function MySaladSelect({ options, value, onChange }) {
     return (
       <div className='ps-5 pb-5 pt-3'>
-        <div className = 'invalid-feedback'></div>
-        <select value={value} onChange={onChange} required className='col-4'>
+        <select value={value} onChange={onChange} required className='col-4 form-select'>
           <option value=''>Gör ditt val</option>
           {options.map(name => <option key={name}> {name} </option>)}
         </select>
+        <div className = "valid-feedback">Korrekt!</div>
+        <div className = "invalid-feedback">Välj en ingrediens!</div>
       </div>
     )
 }
@@ -41,14 +48,17 @@ function MySaladCheckbox({ options, value, onChange }) {
 
 function handleFoundationChange(event) {
   setFoundation(event.target.value);
+  //event.target.parentElement.classList.add("was-validated");
 }
 
 function handleProteinChange(event) {
   setProtein(event.target.value);
+  event.target.parentElement.classList.add("was-validated");
 }
 
 function handleDressingChange(event) {
   setDressing(event.target.value);
+  event.target.parentElement.classList.add("was-validated");
 }
 
 function handleExtraChange(event) {
@@ -63,14 +73,6 @@ function handleExtraChange(event) {
   }
 }
 
-/* detta ger bug.
-function clearForm() {
-  setFoundation('Pasta');
-  setProtein('Kycklingfilé');
-  setDressing('Caesardressing');
-  setExtra(new Set());
-}*/
-
 function clearForm() {
   setFoundation("");
 	setProtein("");
@@ -80,6 +82,10 @@ function clearForm() {
 
 function handleSubmit(event) {
   event.preventDefault()
+  event.target.classList.add("was-validated");
+
+  if(event.target.checkValidity()) {
+
   let salad = new Salad();
   salad
     .add(foundation, inventory[foundation])
@@ -89,12 +95,17 @@ function handleSubmit(event) {
   extra.forEach((item) => {salad.add(item, inventory[item])})
   props.addToShoppingCart(salad);
   clearForm();
+  event.target.reset();
+  event.target.classList.remove("was-validated");
+  nav(`/view-order/confirm/${salad.uuid}`);
+
+}
   
 }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="continer col-12">
+    <form onSubmit={handleSubmit} noValidate>
+      <div className="container col-12">
         <div className="row h-200 p-5 bg-light border rounded-3">
 
           <h2>Välj bas</h2>
