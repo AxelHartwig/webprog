@@ -120,17 +120,18 @@ function handleSubmit(event) {
               value={protein}
               onChange={handleProteinChange}
             />
-           <h4>Välj dressing</h4>
-            <MySaladSelect
-              options={dressings}
-              value={dressing}
-              onChange={handleDressingChange}
-            />
-
+          <h4>Välj tillbehör</h4>
             <MySaladCheckbox
               options={extras}
               value={extra}
               onChange={handleExtraChange}
+            />
+
+          <h5>Välj dressing</h5>
+            <MySaladSelect
+              options={dressings}
+              value={dressing}
+              onChange={handleDressingChange}
             />
         </div>
       </div>

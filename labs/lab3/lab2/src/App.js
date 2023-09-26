@@ -48,7 +48,7 @@ function App() {
           </NavLink>
         </li>
         <li className ="nav-item">
-          <NavLink className="navlink" to="/view-order">
+          <NavLink className="nav-link" to="/view-order">
             Se din beställning
           </NavLink>
         </li>
