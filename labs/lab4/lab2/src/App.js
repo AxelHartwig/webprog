@@ -17,26 +17,13 @@ import * as bootstrap from 'bootstrap';
 
 
 function App() {
-  const [shoppingCart, setShoppingCart] = useState([]);
+  const [shoppingCart, setShoppingCart] = useState(localStorage.getItem("shoppingCart") === null ? [] : Salad.parse(localStorage.getItem("shoppingCart")));
   const navigation = useNavigation();
 
   const addToShoppingCart = ((salad) => setShoppingCart((prev) => new Array(...prev, salad)));
+  localStorage.setItem("shoppingCart", JSON.stringify(shoppingCart));
 
-  /*
-  useEffect(() => {
-		// Load shopping cart from localStorage when the component mounts
-		const savedShoppingCart = window.localStorage.getItem('shoppingCart');
-		if (savedShoppingCart) {
-			setShoppingCart(Salad.parse(savedShoppingCart));
-		}
-	}, [setShoppingCart]);
 
-	//Function to update localStorage whenever shoppingCart changes
-	useEffect(() => {
-		window.localStorage.setItem('shoppingCart', Salad.parse(shoppingCart));
-	}, [shoppingCart]);
-
-  //let extras = Object.keys(inventory).filter(name => inventory[name].extra);*/
 
 
 
